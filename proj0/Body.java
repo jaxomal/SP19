@@ -79,4 +79,9 @@ public class Body {
 		this.xxPos += dt * this.xxVel;
 		this.yyPos += dt * this.yyVel;
 	}
+
+	public void draw() {
+		String imgFile = "images/" + this.imgFileName;
+		StdDraw.picture(this.xxPos, this.yyPos, imgFile);
+	}
 }
