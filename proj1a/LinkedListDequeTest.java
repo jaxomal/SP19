@@ -35,7 +35,7 @@ public class LinkedListDequeTest {
 	  * && is the "and" operation. */
 	public static void addIsEmptySizeTest() {
 		System.out.println("Running add/isEmpty/Size test.");
-		System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
+
 		LinkedListDeque<String> lld1 = new LinkedListDeque<String>();
 
 		boolean passed = checkEmpty(true, lld1.isEmpty());
@@ -64,7 +64,6 @@ public class LinkedListDequeTest {
 
 		System.out.println("Running add/remove test.");
 
-		System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
 		LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
 		// should be empty 
 		boolean passed = checkEmpty(true, lld1.isEmpty());
@@ -80,9 +79,65 @@ public class LinkedListDequeTest {
 		printTestStatus(passed);
 	}
 
+	/** Adds ten thousand items, removes ten thousand, ensures that it is empty */
+	public static void addAlotTest() {
+		System.out.println("Running big add/remove test");
+
+		LinkedListDeque<Integer> lldl = new LinkedListDeque<>();
+		boolean passed = checkEmpty(true, lldl.isEmpty());
+
+		for (int i = 0; i < 100000; i++) {
+			lldl.addFirst(1);
+		}
+		passed = checkEmpty(false, lldl.isEmpty()) && passed;
+
+		for (int i = 0; i < 100000; i++) {
+			lldl.removeFirst();
+		}
+
+		passed = checkEmpty(true, lldl.isEmpty()) && passed;
+
+		printTestStatus(passed);
+	}
+
+	/** Added by czahie.
+	 * Gets the ith item using get and getRecursive, and ensures the result are same. */
+	public static void getTest() {
+		boolean passed = false;
+
+		System.out.println("Running get test.");
+
+		LinkedListDeque<Integer> lld1 = new LinkedListDeque<>();
+
+		lld1.addFirst(10);
+		lld1.addLast(20);
+		lld1.addLast(30);
+
+		int result1 = lld1.get(1);
+		// should be 20.
+		if (result1 == 20) {
+			passed = true;
+		}
+
+		int result2 = lld1.getRecursive(1);
+		// should be 20.
+		if (result2 == 20) {
+			passed = true && passed;
+		}
+
+		// should be equal.
+		if (result1 == result2) {
+			passed = true && passed;
+		}
+
+		printTestStatus(passed);
+	}
+
 	public static void main(String[] args) {
 		System.out.println("Running tests.\n");
 		addIsEmptySizeTest();
 		addRemoveTest();
+		addAlotTest();
+		getTest();
 	}
 } 

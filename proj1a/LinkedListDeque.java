@@ -21,6 +21,17 @@ public class LinkedListDeque<T> {
         sentinel.prev = sentinel;
     }
 
+    public LinkedListDeque(LinkedListDeque other) {
+        sentinel = new Node(null);
+        sentinel.prev = sentinel;
+        sentinel.next = sentinel;
+        size = 0;
+
+        for (int i = 0; i < other.size(); i++) {
+            addFirst((T) other.get(i));
+        }
+    }
+
     public void addFirst(T item) {
         Node temp = sentinel.next;
         sentinel.next = new Node(item);
@@ -101,6 +112,18 @@ public class LinkedListDeque<T> {
                 curr = curr.next;
             }
             return curr.item;
+        }
+    }
+
+    public T getRecursive(int index) {
+        return recursiveHelper(sentinel.next, index);
+    }
+
+    private T recursiveHelper(Node curr, int index) {
+        if (index == 0) {
+            return curr.item;
+        } else {
+            return recursiveHelper(curr.next, index - 1);
         }
     }
 }

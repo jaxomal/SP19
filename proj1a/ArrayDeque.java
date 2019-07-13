@@ -17,6 +17,16 @@ public class ArrayDeque<T> {
         items = (T []) new Object[8];
     }
 
+    public ArrayDeque(ArrayDeque other) {
+        items = (T []) new Object[other.items.length];
+        nextFirst = 0;
+        nextLast = other.items.length;
+        size = 0;
+
+        for (int i = 0; i < other.items.length; i++) {
+            addFirst((T) other.items[i]);
+        }
+    }
     /**
      * Invariants:
      * The next position for adding to the front of the deque is at nextFirst
@@ -33,6 +43,10 @@ public class ArrayDeque<T> {
         items[nextFirst] = item;
         nextFirst = minusOne(nextFirst);
         size++;
+    }
+
+    public boolean isEmpty() {
+        return size == 0;
     }
 
     public void addLast(T item) {
@@ -59,6 +73,9 @@ public class ArrayDeque<T> {
     }
 
     public T removeFirst() {
+        if ((double) size / items.length < 0.25) {
+            resize(items.length / 2);
+        }
         if (size == 0) {
             return null;
         }
@@ -71,6 +88,9 @@ public class ArrayDeque<T> {
     }
 
     public T removeLast() {
+        if ((double) size / items.length < 0.25) {
+            resize(items.length / 2);
+        }
         if (size == 0) {
             return null;
         }
@@ -89,8 +109,9 @@ public class ArrayDeque<T> {
         int counter = 0;
         // To get to the 0th element you must go to nextFirst plusOne
         int curr = plusOne(nextFirst);
-        while (counter <= index) {
+        while (counter < index) {
             curr = plusOne(curr);
+            counter++;
         }
         // Return the indexth element
         return items[curr];
