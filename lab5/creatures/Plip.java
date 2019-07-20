@@ -1,14 +1,14 @@
 package creatures;
 
-import huglife.Creature;
-import huglife.Direction;
-import huglife.Action;
-import huglife.Occupant;
+import huglife.*;
 
 import java.awt.Color;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Map;
+import java.util.Random;
+
+import static huglife.HugLifeUtils.randomEntry;
 
 /**
  * An implementation of a motile pacifist photosynthesizer.
@@ -57,7 +57,9 @@ public class Plip extends Creature {
      * that you get this exactly correct.
      */
     public Color color() {
-        g = 63;
+        r = 99;
+        g = (int) (this.energy * 96 + 63);
+        b = 76;
         return color(r, g, b);
     }
 
@@ -74,7 +76,7 @@ public class Plip extends Creature {
      * private static final variable. This is not required for this lab.
      */
     public void move() {
-        // TODO
+        manEnergy(-0.15);
     }
 
 
@@ -82,7 +84,7 @@ public class Plip extends Creature {
      * Plips gain 0.2 energy when staying due to photosynthesis.
      */
     public void stay() {
-        // TODO
+        manEnergy(0.2);
     }
 
     /**
@@ -91,7 +93,9 @@ public class Plip extends Creature {
      * Plip.
      */
     public Plip replicate() {
-        return this;
+        Plip returnPlip = new Plip(this.energy / 2);
+        this.energy /= 2;
+        return returnPlip;
     }
 
     /**
@@ -114,17 +118,57 @@ public class Plip extends Creature {
         // TODO
         // (Google: Enhanced for-loop over keys of NEIGHBORS?)
         // for () {...}
+        for (Direction key : neighbors.keySet()) {
+            if (neighbors.get(key).name().equalsIgnoreCase("empty")) {
+                emptyNeighbors.addFirst(key);
+            }
+        }
 
-        if (false) { // FIXME
-            // TODO
+        if (emptyNeighbors.isEmpty()) { // FIXME
+            stay();
+            return new Action(Action.ActionType.STAY);
         }
 
         // Rule 2
         // HINT: randomEntry(emptyNeighbors)
+        if (this.energy >= 1) {
+            Direction key = randomEntry(emptyNeighbors);
+            move();
+            return new Action(Action.ActionType.REPLICATE, key);
+        }
 
         // Rule 3
+        for (Direction key : neighbors.keySet()) {
+            if (neighbors.get(key).name().equalsIgnoreCase("clorus")) {
+                if (new Random().nextBoolean()) {
+                    Direction keyz = randomEntry(emptyNeighbors);
+                    move();
+                    return new Action(Action.ActionType.REPLICATE, keyz);
+                } else {
+                    stay();
+                    return new Action(Action.ActionType.STAY);
+                }
+            }
+        }
 
         // Rule 4
+        stay();
         return new Action(Action.ActionType.STAY);
+    }
+
+    private void manEnergy(double energy) {
+        if (energy <= 0) {
+            if (this.energy + energy < 0) {
+                this.energy = 0;
+                return;
+            }
+            this.energy += energy;
+        } else {
+            if (this.energy + energy > 2) {
+                this.energy = 2;
+                return;
+            }
+            this.energy += energy;
+        }
     }
 }
