@@ -29,4 +29,20 @@ public class TestArrayRingBuffer {
         // Should return an error
         // arb.enqueue(2);
     }
+
+    @Test
+    public void testIterationEquals() {
+        ArrayRingBuffer<Integer> arb = new ArrayRingBuffer(5);
+        for (int i = 0; i < 5; i++) {
+            arb.enqueue(1);
+        }
+        ArrayRingBuffer<Integer> arb1 = new ArrayRingBuffer(5);
+        for (int i = 0; i < 5; i++) {
+            arb1.enqueue(1);
+        }
+        assertTrue(arb.equals(arb1));
+        for (int x : arb) {
+            System.out.println(x);
+        }
+    }
 }
