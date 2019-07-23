@@ -8,7 +8,7 @@ import java.util.Iterator;
  */
 
 public interface BoundedQueue<T> extends Iterable<T> {
-    /** Iterator of the queue. */
+    /** @return Iterator of the queue. */
     Iterator<T> iterator();
     /** return size of the buffer. */
     int capacity();
@@ -22,13 +22,12 @@ public interface BoundedQueue<T> extends Iterable<T> {
     T dequeue();
     /** return (but do not delete) item from the front. */
     T peek();
-    /** is the buffer empty (fillCount equals zero)? */
+    /** @return is the buffer empty (fillCount equals zero)? */
     default boolean isEmpty() {
         return fillCount() == 0;
     }
-    /** is the buffer full (fillCount is same as capacity. */
+    /** @return is the buffer full (fillCount is same as capacity. */
     default boolean isFull() {
         return fillCount() == capacity();
     }
-
 }

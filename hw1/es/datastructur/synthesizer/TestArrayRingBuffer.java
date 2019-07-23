@@ -26,8 +26,6 @@ public class TestArrayRingBuffer {
             arb.enqueue(1);
         }
         assertTrue(arb.isFull());
-        // Should return an error
-        // arb.enqueue(2);
     }
 
     @Test

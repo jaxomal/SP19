@@ -140,6 +140,6 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
         if (x == rb.length - 1) {
             return 0;
         }
-        return x += 1;
+        return x + 1;
     }
 }
