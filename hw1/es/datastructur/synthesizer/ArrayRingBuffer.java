@@ -76,10 +76,10 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
     }
 
     private int plusOne(int x) {
-        if (x == rb.length) {
+        if (x == rb.length - 1) {
             return 0;
         }
-        return x++;
+        return x += 1;
     }
 
     // TODO: When you get to part 4, implement the needed code to support
