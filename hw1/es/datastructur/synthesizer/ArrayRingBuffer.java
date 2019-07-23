@@ -1,22 +1,77 @@
 package es.datastructur.synthesizer;
 import java.util.Iterator;
 
-//TODO: Make sure to that this class and all of its methods are public
-//TODO: Make sure to add the override tag for all overridden methods
-//TODO: Make sure to make this class implement BoundedQueue<T>
-
+/**
+ * This class will be used to create the GuitarString class of the assignment.
+ * @author willis
+ * @param <T> Takes in any type of item
+ */
 public class ArrayRingBuffer<T> implements BoundedQueue<T> {
-    /* Index for the next dequeue or peek. */
+    /** Index for the next dequeue or peek. */
     private int first;
-    /* Index for the next enqueue. */
+    /** Index for the next enqueue. */
     private int last;
-    /* Variable for the fillCount. */
+    /** Variable for the fillCount. */
     private int fillCount;
-    /* Array for storing the buffer data. */
+    /** Array for storing the buffer data. */
     private T[] rb;
 
     /**
+     * An ArrayRingBufferIterator used to make the ArrayRingBuffer class
+     * iterable. It is implemented by keeping track of the current position
+     * in the array and tht total amount of items pulled out.
+     */
+    private class ArrayRingBufferIterator implements Iterator<T> {
+        /** The total amount of items pulled. */
+        private int pos;
+        /** The current position inside the array. */
+        private int arrayPos;
+
+        /** Creates the iterator, the amount pulled when created is 0, and
+         * the current position of the array is the instance variable first.
+         */
+        ArrayRingBufferIterator() {
+            pos = 0;
+            arrayPos = first;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return pos != rb.length - 1;
+        }
+
+        @Override
+        public T next() {
+            T item = rb[arrayPos];
+            pos++;
+            arrayPos = plusOne(arrayPos);
+            return item;
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this.getClass() != o.getClass()) {
+            return false;
+        }
+        if (this.capacity() != ((ArrayRingBuffer) o).capacity()
+                || this.fillCount() != ((ArrayRingBuffer) o).fillCount()) {
+            return false;
+        }
+        return java.util.Arrays.equals(((ArrayRingBuffer) o).rb, this.rb);
+    }
+
+    /**
+     * Create a new ArrayRingBuffer iterator to make class iterable.
+     * @return a new ArrayRingBufferIterator.
+     */
+    public Iterator<T> iterator() {
+        return new ArrayRingBufferIterator();
+    }
+
+    /**
      * Create a new ArrayRingBuffer with the given capacity.
+     * @param capacity the maximum amount of items the ArrayRingBuffer can hold
      */
     public ArrayRingBuffer(int capacity) {
         rb = (T []) new Object[capacity];
@@ -32,7 +87,7 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
     @Override
     public void enqueue(T x) {
         if (fillCount == rb.length) {
-            throw new RuntimeException("You cannot add to a full Queue");
+            throw new RuntimeException("Ring Buffer overflow");
         }
         rb[last] = x;
         last = plusOne(last);
@@ -46,10 +101,9 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
     @Override
     public T dequeue() {
         if (fillCount == 0) {
-            throw new RuntimeException("Don't Dequeue an empty BoundedQueue");
+            throw new RuntimeException("Ring Buffer underflow");
         }
         T item = rb[first];
-        // WE HAVE TO MAKE SURE THAT THE ARRAY GOES BACK TO NULLZ
         rb[first] = null;
         first = plusOne(first);
         fillCount--;
@@ -62,6 +116,9 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
      */
     @Override
     public T peek() {
+        if (fillCount == 0) {
+            throw new RuntimeException("Ring Buffer underflow");
+        }
         return rb[first];
     }
 
@@ -75,14 +132,14 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
         return fillCount;
     }
 
+    /** Finds the incremented array position.
+     * @param x the current position
+     * @return returns the incremented position
+     */
     private int plusOne(int x) {
         if (x == rb.length - 1) {
             return 0;
         }
         return x += 1;
     }
-
-    // TODO: When you get to part 4, implement the needed code to support
-    //       iteration and equals.
 }
-    // TODO: Remove all comments that say TODO when you're done.
