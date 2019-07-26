@@ -25,7 +25,7 @@ public class UnionFind {
     /* Returns the size of the set v1 belongs to. */
     public int sizeOf(int v1) {
         v1 = find(v1);
-        return parent(v1);
+        return -parent(v1);
     }
 
     /* Returns the parent of v1. If v1 is the root of a tree, returns the
@@ -49,14 +49,15 @@ public class UnionFind {
     public void union(int v1, int v2) {
         v1 = find(v1);
         v2 = find(v2);
-        int s1 = parent[v1];
-        int s2 = parent[v2];
+        int s1 = parent(v1);
+        int s2 = parent(v2);
         // Now that we have the two roots we compare size
         if (s1 > s2) {
             parent[v2] = v1;
             parent[v1] += s2;
         } else {
             parent[v1] = v2;
+            parent[v2] += s1;
         }
     }
 
@@ -65,6 +66,7 @@ public class UnionFind {
     public int find(int vertex) {
         HashSet<Integer> nodes = new HashSet<>();
         while (true) {
+            validate(vertex);
             if (parent(vertex) <= 0) {
                 break;
             } else {
