@@ -1,6 +1,9 @@
 package hw2;
 
+import edu.princeton.cs.algs4.Quick;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
+import edu.princeton.cs.algs4.QuickFindUF;
+import edu.princeton.cs.introcs.Stopwatch;
 
 import java.util.ArrayList;
 
@@ -169,16 +172,5 @@ public class Percolation {
      * @param args used for potential unit testing
      */
     public static void main(String[] args) {
-        Percolation test = new Percolation(5);
-        test.open(0 ,0);
-        test.open(0, 1);
-        test.open(0, 2);
-        System.out.println(test.neighbors(0, 1));
-        System.out.println(test.isOpen(0, 0));
-        System.out.println(test.isOpen(0, 1));
-        System.out.println(test.isOpen(0, 2));
-        test.open(1, 0);
-        System.out.println(test.isFull(1, 0));
-        System.out.println(test.isFull(2, 0));
     }
 }

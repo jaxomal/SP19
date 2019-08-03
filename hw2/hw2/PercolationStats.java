@@ -2,6 +2,8 @@ package hw2;
 import edu.princeton.cs.introcs.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import static edu.princeton.cs.introcs.StdRandom.uniform;
 
@@ -21,10 +23,17 @@ public class PercolationStats {
         double total = 0;
         for (int i = 0; i < T; i++) {
             Percolation current = pf.make(N);
+            ArrayList<Integer> arrlist = new ArrayList<>();
+            for (int j = 0; j < N * N; j++) {
+                arrlist.add(j);
+            }
             while (!current.percolates()) {
-                int row = uniform(N);
-                int col = uniform(N);
+                int num = uniform(arrlist.size());
+                int pos = arrlist.get(num);
+                int row = pos / N;
+                int col = pos % N;
                 current.open(row, col);
+                arrlist.remove(num);
             }
             results[i] = ((double) current.numberOfOpenSites() / N);
         }
@@ -52,5 +61,15 @@ public class PercolationStats {
     /** @return high endpoint of 95% confidence interval */
     public double confidenceHigh() {
         return confidenceHigh;
+    }
+
+    public static void main(String[] args) {
+        PercolationFactory pf = new PercolationFactory();
+        Stopwatch stopwatch = new Stopwatch();
+        int N = 50;
+        int T = 1600;
+        PercolationStats ps = new PercolationStats(N, T, pf);
+        System.out.println("The size of N: " + N + " and the size of T: " +
+                T + " took " + stopwatch.elapsedTime());
     }
 }
