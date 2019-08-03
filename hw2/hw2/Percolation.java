@@ -56,7 +56,7 @@ public class Percolation {
             openSites[row][col] = true;
             numberOfOpen++;
         } else if (row == openSites.length - 1) {
-            sites.union(openSites.length * openSites.length + 1, col);
+            sites.union(openSites.length * openSites.length + 1, xyTo1D(row, col));
             ArrayList<Integer> neighbors = neighbors(row, col);
             if (!neighbors.isEmpty()) {
                 for (int neighbor : neighbors) {
