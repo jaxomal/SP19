@@ -1,0 +1,32 @@
+InsertOrderSpeedTest
+
+#Strings = 100
+ULLMAP: 0.00
+BSTMAP: 0.00
+Java TreeMap: 0.00
+Java HashMap: 0.00
+
+#Strings = 10000
+ULLMAP: 1.82
+BSTMAP: 1.44
+JAVA TreeMap: 0.01
+JAVA HashMao: 0.00
+
+#Strings = 15000
+ULLMAP: 5.16
+BSTMAP: 5.54
+JAVA TreeMap: 0.03
+JAVA HAshMap 0.01
+
+InsertRandomSpeedest
+#Strings = 1000 #String Length: 1000
+ULLMAP: 0.04
+BSTMAP: 0.03
+JAVA Treemap: 0.02
+
+#Strings = 10000
+ULLMAP: 2.55
+BSTMAP: 0.24
+TREEMAP: 0.25
+
+The BSTMap made in class is actually keeping up with the industrial strength keymap.
