@@ -1,0 +1,22 @@
+InsertInOrderSpeedTest:
+# Strings | ULLMap | MyHashMap | Java
+100 : 0.01 : 0.01 : 0.00
+1000: 0.03 : 0.01 : 0.00
+10000: 1.46 : 0.04 : 0.01
+20000: 11.95 : 0.10 : 0.02
+
+InsertInRandomSpeedTest:
+# Strings | ULLMap | MyHashMap | Java
+100: 0.00 : 0.00 : 0.00
+200: 0.00 : 0.00 : 0.00
+400: 0.00 : 0.00 : 0.00
+800: 0.01 : 0.00 : 0.00
+1600: 0.01 : 0.00 : 0.00
+3200: 0.07 : 0.01 : 0.00
+6400: 0.22 : 0.01 : 0.00
+12800: 0.73 : 0.01 : 0.01
+
+When would it be better to use a BSTMap/TreeMap instead of a HashMap?
+It would be better to use a BSTMap when you want to perform a certain set of operations.
+A TreeMap is a sorted map while a HashMap makes no guarentee of the sorted nature of its items.
+Therefore if you want to do something like take a subtree of a map a BSTMap would make thi spossible.

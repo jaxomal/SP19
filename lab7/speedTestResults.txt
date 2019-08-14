@@ -29,4 +29,4 @@ ULLMAP: 2.55
 BSTMAP: 0.24
 TREEMAP: 0.25
 
-The BSTMap made in class is actually keeping up with the industrial strength keymap.
+The BSTMap made in class is actually keeping up with the industrial strength keymap.
