@@ -105,17 +105,18 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
             return pos;
         }
         int posLeft = find(item, pos * 2);
-        int posRight = find(item, pos * 2 + 1);
         if (posLeft > 0) {
             return posLeft;
-        } else if (posRight > 0) {
+        }
+        int posRight = find(item, pos * 2 + 1);
+        if (posRight > 0) {
             return posRight;
         } else {
             return -1;
         }
     }
 
-    private void swim(int k) {
+    private void swim(int 
         while (k > 1 && greater(k / 2, k)) {
             swap(k, k / 2);
             k = k / 2;
