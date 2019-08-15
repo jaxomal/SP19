@@ -1,6 +1,7 @@
 package bearmaps;
 
 import java.util.NoSuchElementException;
+import java.util.HashMap;
 
 /**
  * The priority is extrinsic to the object. That is, rather than relying
@@ -12,11 +13,13 @@ import java.util.NoSuchElementException;
 public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     private Entry[] pq;
     private int size;
+    private HashMap<T, Integer> map;
 
     @SuppressWarnings("unchecked")
     public ArrayHeapMinPQ(int initCapacity) {
         pq = (Entry[]) new ArrayHeapMinPQ<?>.Entry[initCapacity + 1];
         size = 0;
+        map = new HashMap<>();
     }
 
     public ArrayHeapMinPQ() {
@@ -35,7 +38,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     }
     /* Returns true if the PQ contains the given item. */
     public boolean contains(T item) {
-        return find(item, 1) > 0;
+        return map.containsKey(item);
     }
     /* Returns the minimum item. Throws NoSuchElementException if the PQ is empty. */
     public T getSmallest() {
@@ -53,6 +56,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         if ((size > 0) && (size == (pq.length - 1) / 4)) {
             resize(pq.length / 2);
         }
+        map.remove(min.item);
         return min.item;
     }
     /* Returns the number of items in the PQ. */
@@ -66,11 +70,10 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     /* Changes the priority of the given item. Throws NoSuchElementException if the item
      * doesn't exist. */
     public void changePriority(T item, double priority) {
-        int found = find(item);
-        if (found < 0) {
+        if (!map.containsKey(item)) {
             throw new NoSuchElementException();
         }
-        pq[found].priority = priority;
+        pq[map.get(item)].priority = priority;
     }
 
     private class Entry {
@@ -116,7 +119,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         }
     }
 
-    private void swim(int 
+    private void swim(int k) {
         while (k > 1 && greater(k / 2, k)) {
             swap(k, k / 2);
             k = k / 2;
@@ -140,7 +143,9 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     private void swap(int j, int k) {
         Entry temp = pq[j];
         pq[j] = pq[k];
+        map.put(pq[j].item, j);
         pq[k] = temp;
+        map.put(temp.item, k);
     }
 
     private boolean greater(int j, int k) {

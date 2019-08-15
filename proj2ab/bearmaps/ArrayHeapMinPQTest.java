@@ -100,23 +100,27 @@ public class ArrayHeapMinPQTest {
             temp.removeSmallest();
         }
         System.out.println("Add and Remove: Total time elapsed: " + sw.elapsedTime() + " seconds.");
-        sw = new Stopwatch();
-        NaiveMinPQ<Integer> temp2 = new NaiveMinPQ<>();
-        for (int i = 100000; i > 0; i--) {
-            temp2.add(i, i);
-        }
-        for (int i = 1; i <= 100000; i++) {
-            temp2.removeSmallest();
-        }
-        System.out.println("Add and Remove: Total time elapsed: " + sw.elapsedTime() + " seconds.");
+//        sw = new Stopwatch();
+//        NaiveMinPQ<Integer> temp2 = new NaiveMinPQ<>();
+//        for (int i = 100000; i > 0; i--) {
+//            temp2.add(i, i);
+//        }
+//        for (int i = 1; i <= 100000; i++) {
+//            temp2.removeSmallest();
+//        }
+//        System.out.println("Add and Remove: Total time elapsed: " + sw.elapsedTime() + " seconds.");
         for (int i = 100000; i > 0; i--) {
             temp.add(i, i);
-            temp2.add(i, i);
         }
         sw = new Stopwatch();
         for (int i = 100000; i > 0; i--) {
-            temp2.changePriority(i, 100000 - i);
+            temp.changePriority(i, 100000 - i);
         }
         System.out.println("ChangePriority: Total time elapsed: " + sw.elapsedTime() + " seconds.");
+//        sw = new Stopwatch();
+//        for (int i = 100000; i > 0; i--) {
+//            temp2.changePriority(i, 100000 - i);
+//        }
+//        System.out.println("ChangePriority: Total time elapsed: " + sw.elapsedTime() + " seconds.");
     }
 }
