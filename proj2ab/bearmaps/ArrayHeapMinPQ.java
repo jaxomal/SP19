@@ -38,7 +38,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     }
     /* Returns true if the PQ contains the given item. */
     public boolean contains(T item) {
-        return map.containsKey(item);
+        return find(item, 1) > 0;
     }
     /* Returns the minimum item. Throws NoSuchElementException if the PQ is empty. */
     public T getSmallest() {
@@ -53,7 +53,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         swap(1, size--);
         sink(1);
         pq[size + 1] = null;
-        if ((size > 0) && (size == (pq.length - 1) / 4)) {
+        if ((size > 0) && (size < (pq.length - 1) / 4)) {
             resize(pq.length / 2);
         }
         map.remove(min.item);
@@ -73,7 +73,13 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         if (!map.containsKey(item)) {
             throw new NoSuchElementException();
         }
+        double oldPriority = pq[map.get(item)].priority;
         pq[map.get(item)].priority = priority;
+        if (oldPriority > priority) {
+            swim(map.get(item));
+        } else if (oldPriority < priority) {
+            sink(map.get(item));
+        }
     }
 
     private class Entry {

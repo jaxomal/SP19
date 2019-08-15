@@ -28,6 +28,7 @@ public class ArrayHeapMinPQTest {
     public void testResizeDown() {
         ArrayHeapMinPQ<Integer> temp = new ArrayHeapMinPQ<>(100);
         temp.add(1, 1);
+        temp.add(1, 2);
         temp.removeSmallest();
         assertEquals(50, temp.getCapacity());
     }
