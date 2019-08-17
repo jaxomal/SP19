@@ -81,7 +81,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         map.remove(min.item);
         return min.item;
     }
-    
+
     /** Returns the number of items in the PQ. */
     public int size() {
         return size;
