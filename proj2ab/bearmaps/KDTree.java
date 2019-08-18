@@ -1,6 +1,8 @@
 package bearmaps;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
 
 /**
  * @author willi
