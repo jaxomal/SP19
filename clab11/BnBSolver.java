@@ -67,6 +67,7 @@ public class BnBSolver {
         }
         sort2(largerThanBear, largerThanBed, matchedBears, matchedBeds);
         sort2(smallerThanBear, smallerThanBed, matchedBears, matchedBeds);
+
     }
 
     /**
