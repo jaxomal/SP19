@@ -40,10 +40,15 @@ public class MergeSort {
      * @return         A Queue of queues, each containing an item from items.
      *
      */
-    private static <Item extends Comparable> Queue<Queue<Item>>
-            makeSingleItemQueues(Queue<Item> items) {
-        // Your code here!
-        return null;
+    private static <Item extends Comparable> Queue<Queue<Item>> makeSingleItemQueues(
+            Queue<Item> items) {
+        Queue<Queue<Item>> res = new Queue<>();
+        for (Item item : items) {
+            Queue<Item> singleQueue = new Queue<>();
+            singleQueue.enqueue(item);
+            res.enqueue(singleQueue);
+        }
+        return res;
     }
 
     /**
@@ -61,8 +66,13 @@ public class MergeSort {
      */
     private static <Item extends Comparable> Queue<Item> mergeSortedQueues(
             Queue<Item> q1, Queue<Item> q2) {
-        // Your code here!
-        return null;
+        // while both queues aren't empty/
+        Queue<Item> res = new Queue<>();
+        while (!q1.isEmpty() && q2.isEmpty()) {
+            Item min = getMin(q1, q2);
+            res.enqueue(min);
+        }
+        return res;
     }
 
     /**
@@ -77,7 +87,25 @@ public class MergeSort {
      */
     public static <Item extends Comparable> Queue<Item> mergeSort(
             Queue<Item> items) {
-        // Your code here!
-        return items;
+        if (items.size() == 1) {
+            return items;
+        }
+        if (items.size() == 2) {
+            Queue<Queue<Item>> singleItemQueues = makeSingleItemQueues(items);
+            return mergeSortedQueues(singleItemQueues.dequeue(), singleItemQueues.dequeue());
+        }
+        int half = items.size() / 2;
+        int size = items.size();
+        Queue<Item> leftHalf = new Queue<>();
+        Queue<Item> rightHalf = new Queue<>();
+        for (int i = 0; i < half; i++) {
+            leftHalf.enqueue(items.dequeue());
+        }
+        for (int i = half; i < size; i++) {
+            rightHalf.enqueue(items.dequeue());
+        }
+        leftHalf = MergeSort.mergeSort(leftHalf);
+        rightHalf = MergeSort.mergeSort(rightHalf);
+        return mergeSortedQueues(leftHalf, rightHalf);
     }
 }
