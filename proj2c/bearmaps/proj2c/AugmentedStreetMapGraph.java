@@ -15,8 +15,11 @@ import java.util.*;
  * @author Alan Yao, Josh Hug, ________
  */
 public class AugmentedStreetMapGraph extends StreetMapGraph {
+    /** Converts from the coordinates of the node to the node */
     private HashMap<Point, Node> convert;
+    /** Converts from the name of the node to the node */
     private HashMap<String, Node> names;
+    /** Used to find the nearest vertex */
     private WeirdPointSet kdTree;
 
     public AugmentedStreetMapGraph(String dbPath) {

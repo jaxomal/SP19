@@ -138,10 +138,20 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         return super.buildJsonResponse(result);
     }
 
+    /**
+     * @param ulLon upper left longitude.
+     * @param lrLon lower right longitude.
+     * @param ulLat upper left latitude.
+     * @param lrLat lower right latitude.
+     * @return returns whether the query is valid.
+     */
     private boolean invalid(double ulLon, double lrLon, double ulLat, double lrLat) {
         return ulLon > lrLon || ulLat < lrLat;
     }
 
+    /**
+     * @return sends back a failed query.
+     */
     private Map<String, Object> queryFail() {
         Map<String, Object> results = new HashMap<>();
         results.put("render_grid", null);
@@ -251,6 +261,10 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         return tileImg;
     }
 
+    /**
+     * @param depth how clear a photo is.
+     * @return the resolution at a given depth.
+     */
     private double calculateResolution(int depth) {
         double initialRes = (ROOT_LRLON - ROOT_ULLON) / (TILE_SIZE * 2) * FEET_PER_DEGREE_LONGITUDE;
         return initialRes / (Math.pow(2, depth - 1));
@@ -292,6 +306,10 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         return tiles;
     }
 
+    /**
+     * @param filename a photo in filename format.
+     * @return the coordinates of a tile, for both the upper left and lower right.
+     */
     public Tuple<Tuple<Double, Double>, Tuple<Double, Double>> tileCoordinate(String filename) {
         int depth = parse('d', filename);
         int x = parse('x', filename);
@@ -309,6 +327,11 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         return new Tuple<>(ul, lr);
     }
 
+    /**
+     * @param c the variable you want to parse for.
+     * @param filename the photo's filename.
+     * @return the value of the variable.
+     */
     private int parse(char c, String filename) {
         String build = "";
         boolean activated = false;
@@ -326,6 +349,14 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         return Integer.parseInt(build);
     }
 
+    /**
+     *
+     * @param l1 upper left corner of rectangle 1.
+     * @param r1 lower right corner of rectangle 1.
+     * @param l2 upper left corner of rectangle 2.
+     * @param r2 lower right corner of rectangle 2.
+     * @return whether or not the query is within the range of the raster box.
+     */
     private boolean inBounds(Tuple<Double, Double> l1, Tuple<Double, Double> r1, Tuple<Double, Double> l2, Tuple<Double, Double> r2) {
         if (l1.getFirst() > r2.getFirst()) {
             return false;
@@ -352,6 +383,11 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         return new Tuple(x, y);
     }
 
+    /**
+     * @param depth the current depth level.
+     * @param var the variable we want to adjust.
+     * @return a corrected version of the variable if it is out of bounds.
+     */
     public int correctBounds(int depth, int var) {
         if (var < 0) {
             return 0;
