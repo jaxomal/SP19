@@ -20,6 +20,7 @@ import java.util.Set;
 public class WordGraph implements AStarGraph<String> {
     private Set<String> words;
     private static final String WORDFILE = "words10000.txt";
+    private static final char[] ALPHABET = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
 
     /**
      * Reads the wordfile specified by the wordfile variable.

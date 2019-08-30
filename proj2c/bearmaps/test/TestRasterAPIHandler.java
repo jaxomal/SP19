@@ -1,9 +1,11 @@
 package bearmaps.test;
 
+import bearmaps.proj2c.utils.Tuple;
 import org.junit.Before;
 import org.junit.Test;
 import bearmaps.proj2c.server.handler.impl.RasterAPIHandler;
 
+import java.awt.image.Raster;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -49,6 +51,91 @@ public class TestRasterAPIHandler {
                          + mapToString(params) + ".\n";
             checkParamsMap(msg, expected, actual);
         }
+    }
+
+    @Test
+    public void testGetPath() {
+        RasterAPIHandler test = new RasterAPIHandler();
+        String res = test.getPath(0, 0, 0);
+        boolean passed = false;
+        if (res.equals("d0_x0_y0.png")) {
+            passed = true;
+        }
+        assertTrue(passed);
+    }
+
+    @Test
+    public void testCalcIndex() {
+        RasterAPIHandler test = new RasterAPIHandler();
+        double lowerBound = -122.2998046875;
+        double upperBound = -122.2119140625;
+        double dim = -122.22;
+        int depth = 1;
+        int expected = 1;
+        int actual = test.calcIndex(lowerBound, upperBound, dim, depth);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void tilesInBoundary() {
+        RasterAPIHandler test = new RasterAPIHandler();
+        int depth = 2;
+        double lrLon = -122.2104604264636;
+        double ulLon = -122.30410170759153;
+        double ulLat = 37.870213571328854;
+        double lrLat = 37.8318576119893;
+        String[][] res = test.tilesInBoundary(depth, ulLon, lrLon, ulLat, lrLat);
+        Tuple<Tuple<Double, Double>, Tuple<Double,Double>> ul = test.tileCoordinate(res[0][0]);
+        Tuple<Tuple<Double, Double>, Tuple<Double,Double>> lr = test.tileCoordinate(res[res.length - 1][res[0].length - 1]);
+        Tuple<Double, Double> ulUl = ul.getFirst();
+        Tuple<Double, Double> lrLr = lr.getSecond();
+        double rasterizedLrLon = lrLr.getFirst();
+        double rasterizedLrLat = lrLr.getSecond();
+        double rassterizedUlLon = ulUl.getFirst();
+        double rasterizedUlLat = ulUl.getSecond();
+        String[][] expected = new String[3][4];
+        for (int y = 1; y <= 3; y++) {
+            for (int x = 0; x <= 3; x++) {
+                expected[y-1][x] = test.getPath(2, x, y);
+            }
+        }
+        assertArrayEquals(expected, res);
+    }
+
+    @Test
+    public void testTileIndexes() {
+        RasterAPIHandler test = new RasterAPIHandler();
+        double lowerBound = -122.29980468;
+        double upperBound = -122.21191406;
+        double x = -122.21192;
+        double y = 37.89219554724;
+        int depth = 4;
+        Tuple<Integer, Integer> actual = test.tileIndexes(depth, x, y);
+        Tuple<Integer, Integer> expected = new Tuple(15, 0);
+        assertEquals(expected.getFirst(), actual.getFirst());
+        assertEquals(expected.getSecond(), actual.getSecond());
+    }
+
+    @Test
+    public void testTileCoordinate() {
+        RasterAPIHandler test = new RasterAPIHandler();
+        int depth = 1;
+        int ulRow = 0;
+        int ulCol = 0;
+        int lrRow = 1;
+        int lrCol = 1;
+        String ulInput = test.getPath(depth, ulRow, ulCol);
+        String lrInput = test.getPath(depth, lrRow, lrCol);
+        Tuple<Tuple<Double, Double>, Tuple<Double,Double>> ulRes = test.tileCoordinate(ulInput);
+        Tuple<Tuple<Double, Double>, Tuple<Double,Double>> lrRes = test.tileCoordinate(lrInput);
+        double expectedUlLon = -122.2998046875;
+        double expectedUlLat = 37.892195547244356;
+        double expectedLrLon = -122.2119140625;
+        double expectedLrLat = 37.82280243352756;
+        assertEquals(expectedUlLon, ulRes.getFirst().getFirst(), 0.001);
+        assertEquals(expectedUlLat, ulRes.getFirst().getSecond(), 0.001);
+        assertEquals(expectedLrLon, lrRes.getSecond().getFirst(), 0.001);
+        assertEquals(expectedLrLat, lrRes.getSecond().getSecond(), 0.001);
     }
 
     private List<Map<String, Double>> paramsFromFile() throws Exception {
@@ -158,5 +245,4 @@ public class TestRasterAPIHandler {
 
         return sj.toString();
     }
-
 }
